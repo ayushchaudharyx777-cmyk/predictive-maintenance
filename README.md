@@ -56,7 +56,7 @@ flowchart LR
 | Ops | MLflow tracking, model registry with versions, quality gate | `train.py`, `scripts/quality_gate.py` |
 | Ops | Drift monitoring (PSI) on logged API traffic, scheduled workflow that opens an issue on ALERT | `monitor.py`, `.github/workflows/monitor.yml` |
 | Ops | CI (lint, tests, k8s schema, Airflow DAG, docker build), CD to GHCR on a tag, Docker + compose | `.github/`, `Dockerfile` |
-| Tier 3 | DVC pipeline, Airflow DAGs, Kubernetes manifests (API, dashboard, HPA, drift CronJob) | `dvc.yaml`, `airflow/`, `k8s/` |
+| Infra | DVC pipeline, Airflow DAGs, Kubernetes manifests (API, dashboard, HPA, drift CronJob) | `dvc.yaml`, `airflow/`, `k8s/` |
 
 ## Quick start
 
@@ -175,7 +175,7 @@ python scripts/quality_gate.py                       # exit 1 if the new model i
 
 Scheduled version: `.github/workflows/monitor.yml` checks `monitoring/current.csv` daily and opens an issue on ALERT.
 
-## Tier 3 extras (what they are, honestly)
+## Pipeline and deployment tooling (what is built, what is not)
 
 - **DVC:** first delete the `data/` line from `.gitignore`, then `dvc init`, `dvc add data/PdM_telemetry.csv` (and the
   other four files), `dvc remote add -d storage ../dvc-storage`, `dvc repro`, `dvc push`. Change `params.yaml` ->
