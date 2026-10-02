@@ -179,8 +179,7 @@ Scheduled version: `.github/workflows/monitor.yml` checks `monitoring/current.cs
 
 - **DVC:** first delete the `data/` line from `.gitignore`, then `dvc init`, `dvc add data/PdM_telemetry.csv` (and the
   other four files), `dvc remote add -d storage ../dvc-storage`, `dvc repro`, `dvc push`. Change `params.yaml` ->
-  `dvc repro` -> `dvc metrics diff`. The pipeline definition is parsed and its stage graph checked; the remote
-  round-trip has to be run on your machine.
+  `dvc repro` -> `dvc metrics diff`.
 - **Airflow:** `airflow/dags/pdm_pipeline.py` - weekly validate -> train -> gate, daily drift check. Compiles in CI.
   Needs WSL2/Docker on Windows.
 - **Kubernetes:** `docker build --target baked -t pdm-api:1.0 .`, then `kubectl apply -k k8s/` (kind/minikube).
