@@ -1,0 +1,16 @@
+[
+  {
+    "version": "20261003-050220",
+    "model": "Gradient Boosting (lr=0.1, leaves=15)",
+    "threshold": 0.5,
+    "pr_auc": 0.9992746025546092,
+    "roc_auc": 0.9999875210517691,
+    "recall": 1.0,
+    "precision": 0.9915333960489181,
+    "failure_recall": 1.0,
+    "false_alarm_days_per_week": 0.38687392055267705,
+    "median_lead_hours": 24.0,
+    "component_accuracy": 1.0,
+    "saving_vs_run_to_failure": 995500
+  }
+]

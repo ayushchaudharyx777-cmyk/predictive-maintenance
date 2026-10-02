@@ -114,10 +114,14 @@ def build_features(telemetry, errors, maint, machines) -> pd.DataFrame:
 
 
 def add_labels(feats: pd.DataFrame, failures: pd.DataFrame, horizon_hours: int) -> pd.DataFrame:
-    """label = 1 if the machine fails within the next `horizon_hours` (strictly after the row's time)."""
-    f = failures[["datetime", "machineID"]].copy()
+    """label = 1 if the machine fails within the next `horizon_hours` (strictly after the row's time).
+
+    failing_comps = component(s) of that next failure, e.g. "comp2" or "comp1+comp3" (two can fail together).
+    """
+    f = failures[["datetime", "machineID", "failure"]].copy()
     f["datetime"] = _dt(f["datetime"])
-    f = f.drop_duplicates().rename(columns={"datetime": "next_failure"}).sort_values("next_failure")
+    f = (f.sort_values("failure").groupby(["machineID", "datetime"])["failure"].agg("+".join).reset_index()
+         .rename(columns={"datetime": "next_failure", "failure": "failing_comps"}).sort_values("next_failure"))
     left = feats[["datetime", "machineID"]].reset_index().sort_values("datetime")
     j = pd.merge_asof(
         left, f, left_on="datetime", right_on="next_failure", by="machineID",
@@ -126,6 +130,7 @@ def add_labels(feats: pd.DataFrame, failures: pd.DataFrame, horizon_hours: int) 
     hours = (j["next_failure"] - j["datetime"]).dt.total_seconds() / 3600
     out = feats.copy()
     out["hours_to_failure"] = pd.Series(hours.to_numpy(), index=j["index"].to_numpy())
+    out["failing_comps"] = pd.Series(j["failing_comps"].to_numpy(), index=j["index"].to_numpy())
     out["label"] = (out["hours_to_failure"] <= horizon_hours).astype(int)
     # the last `horizon` hours of the data have an unknown future -> cannot be labelled honestly
     cutoff = out["datetime"].max() - pd.Timedelta(hours=horizon_hours)

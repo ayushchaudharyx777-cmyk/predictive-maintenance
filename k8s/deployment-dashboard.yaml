@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdm-dashboard
+  namespace: pdm
+  labels: {app: pdm-dashboard}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: pdm-dashboard}
+  template:
+    metadata:
+      labels: {app: pdm-dashboard}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: dashboard
+          image: pdm-api:1.0
+          imagePullPolicy: IfNotPresent
+          command: ["streamlit", "run", "app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
+          ports:
+            - containerPort: 8501
+          envFrom:
+            - configMapRef: {name: pdm-config}
+          readinessProbe:
+            httpGet: {path: /_stcore/health, port: 8501}
+            initialDelaySeconds: 15
+          resources:
+            requests: {cpu: 250m, memory: 512Mi}
+            limits: {cpu: "1", memory: 1Gi}

@@ -42,6 +42,15 @@ def test_predict_flags_machine_about_to_fail(client, raw):
     assert 0 <= calm["risk_score"] <= 1
     assert risky["risk_score"] > calm["risk_score"]
     assert risky["status"] in {"ALERT", "WATCH", "OK"} and risky["horizon_hours"] == 24
+    if risky["status"] != "OK":
+        assert risky["likely_component"].startswith("comp") and risky["reasons"]
+    assert calm["status"] != "OK" or (calm["likely_component"] is None and calm["reasons"] == [])
+
+
+def test_predictions_are_logged_for_monitoring(client, raw, dirs):
+    client.post("/predict", json=_payload(raw))
+    log = pd.read_json(dirs / "logs" / "predictions.jsonl", lines=True)
+    assert {"risk", "machineID", "volt_mean_24h"} <= set(log.columns)
 
 
 def test_predict_works_without_error_or_maintenance_history(client, raw):

@@ -1,0 +1,4 @@
+# Optional extras (not needed to train, serve or test)
+-r requirements.txt
+mlflow       # experiment tracking - train.py logs to it automatically when installed
+dvc          # data / pipeline versioning

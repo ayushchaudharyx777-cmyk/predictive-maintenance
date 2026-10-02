@@ -1,0 +1,120 @@
+{
+  "status": "ALERT",
+  "source": "simulated drift demo (python monitor.py --simulate)",
+  "rows_checked": 1000,
+  "generated": "2026-10-03 05:08:18",
+  "features": [
+    {
+      "feature": "pressure_mean_24h",
+      "psi": 8.2831,
+      "level": "ALERT",
+      "reference_mean": 100.824,
+      "current_mean": 112.711
+    },
+    {
+      "feature": "vibration_mean_24h",
+      "psi": 8.2831,
+      "level": "ALERT",
+      "reference_mean": 40.403,
+      "current_mean": 48.49
+    },
+    {
+      "feature": "vibration",
+      "psi": 1.6459,
+      "level": "ALERT",
+      "reference_mean": 40.37,
+      "current_mean": 48.225
+    },
+    {
+      "feature": "pressure",
+      "psi": 1.0574,
+      "level": "ALERT",
+      "reference_mean": 100.932,
+      "current_mean": 112.903
+    },
+    {
+      "feature": "volt_std_24h",
+      "psi": 0.011,
+      "level": "OK",
+      "reference_mean": 14.93,
+      "current_mean": 14.87
+    },
+    {
+      "feature": "days_since_comp1",
+      "psi": 0.0086,
+      "level": "OK",
+      "reference_mean": 58.312,
+      "current_mean": 56.83
+    },
+    {
+      "feature": "pressure_std_24h",
+      "psi": 0.0075,
+      "level": "OK",
+      "reference_mean": 10.059,
+      "current_mean": 10.052
+    },
+    {
+      "feature": "volt_mean_24h",
+      "psi": 0.0074,
+      "level": "OK",
+      "reference_mean": 170.763,
+      "current_mean": 170.815
+    },
+    {
+      "feature": "rotate_mean_24h",
+      "psi": 0.0072,
+      "level": "OK",
+      "reference_mean": 446.956,
+      "current_mean": 447.275
+    },
+    {
+      "feature": "volt",
+      "psi": 0.0068,
+      "level": "OK",
+      "reference_mean": 170.975,
+      "current_mean": 171.35
+    },
+    {
+      "feature": "rotate",
+      "psi": 0.0062,
+      "level": "OK",
+      "reference_mean": 446.717,
+      "current_mean": 449.312
+    },
+    {
+      "feature": "rotate_std_24h",
+      "psi": 0.005,
+      "level": "OK",
+      "reference_mean": 50.045,
+      "current_mean": 49.668
+    },
+    {
+      "feature": "days_since_comp4",
+      "psi": 0.0042,
+      "level": "OK",
+      "reference_mean": 58.421,
+      "current_mean": 58.906
+    },
+    {
+      "feature": "vibration_std_24h",
+      "psi": 0.0038,
+      "level": "OK",
+      "reference_mean": 5.003,
+      "current_mean": 5.009
+    },
+    {
+      "feature": "days_since_comp2",
+      "psi": 0.0032,
+      "level": "OK",
+      "reference_mean": 57.828,
+      "current_mean": 60.402
+    },
+    {
+      "feature": "days_since_comp3",
+      "psi": 0.0027,
+      "level": "OK",
+      "reference_mean": 60.219,
+      "current_mean": 57.78
+    }
+  ]
+}

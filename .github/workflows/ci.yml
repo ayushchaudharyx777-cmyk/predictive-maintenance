@@ -15,5 +15,18 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - name: Lint
         run: ruff check .
-      - name: Tests (synthetic data - trains a model, tests features, leakage, API)
+      - name: Tests (synthetic data - trains models, tests features, leakage, API, drift, policy maths, gate)
         run: pytest -q
+      - name: Validate Kubernetes manifests against the API schema
+        run: |
+          pip install kubernetes-validate
+          kubernetes-validate -k 1.34 --strict $(ls k8s/*.yaml | grep -v kustomization)
+      - name: Airflow DAG compiles
+        run: python -m py_compile airflow/dags/pdm_pipeline.py
+  docker-build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t pdm-api:ci .

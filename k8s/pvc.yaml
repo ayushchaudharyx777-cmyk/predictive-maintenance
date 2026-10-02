@@ -1,0 +1,12 @@
+# Shared volume for the API's prediction log (read by the drift CronJob). ReadWriteOnce is fine for kind/minikube
+# (single node); a multi-node production cluster would use RWX storage or ship logs to a queue/DB instead.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pdm-logs
+  namespace: pdm
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi

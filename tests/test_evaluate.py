@@ -1,6 +1,6 @@
 import pandas as pd
 
-from evaluate import event_metrics, pick_threshold, row_metrics
+from evaluate import alert_episodes, bootstrap_pr_auc, cost_threshold, event_metrics, fbeta_threshold, row_metrics
 
 
 def _scored():
@@ -31,6 +31,33 @@ def test_row_metrics():
     assert abs(m["precision"] - 1 / 3) < 1e-9 and abs(m["recall"] - 1 / 3) < 1e-9
 
 
-def test_pick_threshold_separable():
-    thr = pick_threshold([0, 0, 0, 1, 1], [0.1, 0.2, 0.3, 0.8, 0.9])
+def test_fbeta_threshold_separable():
+    thr = fbeta_threshold([0, 0, 0, 1, 1], [0.1, 0.2, 0.3, 0.8, 0.9])
     assert 0.3 < thr <= 0.8
+
+
+def test_lead_time_is_first_alert_in_window():
+    assert event_metrics(_scored(), threshold=0.5)["median_lead_hours"] == 6.0
+
+
+def test_cost_threshold_avoids_false_alarms_and_misses():
+    costs = {"unplanned_failure": 10000, "planned_repair": 2500, "inspection": 500}
+    s = _scored()
+    s.loc[s["machineID"] == 2, "risk"] = 0.95      # now both failures are detectable above 0.85
+    thr = cost_threshold(s, costs)
+    m = event_metrics(s, thr)
+    assert m["failures_caught"] == 2 and m["false_alarm_days"] == 0
+
+
+def test_alert_episodes_group_and_label():
+    ep = alert_episodes(_scored(), threshold=0.5)
+    assert len(ep) == 2                              # machine 1 (one alert row), machine 3 (two rows, one episode)
+    by_machine = ep.set_index("machineID")
+    assert by_machine.loc[1, "outcome"] == "Failure followed" and by_machine.loc[1, "lead_hours"] == 6
+    assert by_machine.loc[3, "outcome"] == "False alarm"
+
+
+def test_bootstrap_interval_contains_point_estimate():
+    s = _scored()
+    lo, hi = bootstrap_pr_auc(s, n=50)
+    assert 0 <= lo <= hi <= 1

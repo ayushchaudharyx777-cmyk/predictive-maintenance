@@ -1,0 +1,61 @@
+# Reproducible pipeline: dvc repro   |   compare runs: dvc metrics diff / dvc params diff
+# Small outputs use cache:false so they stay in git (the dashboard needs them); the raw CSVs are tracked by DVC.
+stages:
+  validate:
+    cmd: python validate.py
+    deps:
+      - data/PdM_telemetry.csv
+      - data/PdM_errors.csv
+      - data/PdM_maint.csv
+      - data/PdM_failures.csv
+      - data/PdM_machines.csv
+      - validate.py
+      - features.py
+  train:
+    cmd: python train.py
+    deps:
+      - data/PdM_telemetry.csv
+      - data/PdM_errors.csv
+      - data/PdM_maint.csv
+      - data/PdM_failures.csv
+      - data/PdM_machines.csv
+      - train.py
+      - features.py
+      - validate.py
+      - evaluate.py
+      - policy.py
+      - explain.py
+      - report.py
+    params:
+      - horizon_hours
+      - step_hours
+      - train_frac
+      - valid_frac
+      - threshold_by
+      - fbeta
+      - seed
+      - costs
+      - gb_grid
+    outs:
+      - models/model.joblib:
+          cache: false
+      - models/component_model.joblib:
+          cache: false
+      - models/meta.json:
+          cache: false
+      - models/reference.csv.gz:
+          cache: false
+      - models/test_scores.csv.gz:
+          cache: false
+      - reports/RESULTS.md:
+          cache: false
+      - reports/pr_curve.png:
+          cache: false
+    metrics:
+      - reports/metrics.json:
+          cache: false
+  gate:
+    cmd: python scripts/quality_gate.py
+    deps:
+      - reports/metrics.json
+      - scripts/quality_gate.py

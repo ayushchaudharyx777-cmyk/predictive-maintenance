@@ -1,8 +1,23 @@
-# All assumptions live here. Change a value, re-run `python train.py`.
+# All assumptions live here. Change a value, re-run `python train.py` (or `dvc repro`).
 data_dir: data
 horizon_hours: 24      # "will this machine fail in the next 24 hours?"
 step_hours: 3          # score every 3rd hour (keeps training fast, loses nothing: features are rolling)
 train_frac: 0.6        # first 60% of the timeline -> train
 valid_frac: 0.2        # next 20% -> choose model + alert threshold; last 20% -> test
-fbeta: 2.0             # threshold maximises F2: a missed failure hurts more than a false alarm
+threshold_by: cost     # cost = cheapest threshold on validation under `costs`; fbeta = best F-beta
+fbeta: 2.0
 seed: 42
+n_bootstrap: 200       # machine-level bootstrap resamples for the PR-AUC confidence interval
+
+# ASSUMED costs (no real cost data ships with the dataset) - the savings table depends entirely on these
+costs:
+  unplanned_failure: 10000   # breakdown: emergency repair + lost production
+  planned_repair: 2500       # same component replaced on schedule after an alert
+  inspection: 500            # a technician checks a machine after a false alarm
+
+# Gradient Boosting settings tried on the validation set
+gb_grid:
+  - {learning_rate: 0.1, max_leaf_nodes: 31}
+  - {learning_rate: 0.05, max_leaf_nodes: 31}
+  - {learning_rate: 0.1, max_leaf_nodes: 15}
+  - {learning_rate: 0.05, max_leaf_nodes: 63}

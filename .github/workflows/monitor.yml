@@ -1,0 +1,46 @@
+name: Scheduled drift monitoring
+# Every day: if a fresh batch of feature rows sits at monitoring/current.csv, compare it with the training reference.
+# On ALERT the job fails and opens a GitHub issue. Needs models/ committed to the repo.
+# Demo: python monitor.py --simulate --save-batch monitoring/current.csv  -> commit it -> Actions > Run workflow.
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - run: pip install -r requirements.txt
+      - name: Is there a batch to check?
+        id: batch
+        run: |
+          if [ -f monitoring/current.csv ] && [ -f models/reference.csv.gz ]; then echo "found=true" >> "$GITHUB_OUTPUT"; else echo "found=false" >> "$GITHUB_OUTPUT"; echo "No monitoring/current.csv or models/ - nothing to check."; fi
+      - name: Drift check
+        id: drift
+        if: steps.batch.outputs.found == 'true'
+        continue-on-error: true
+        run: python monitor.py --current monitoring/current.csv
+      - uses: actions/upload-artifact@v4
+        if: steps.batch.outputs.found == 'true'
+        with:
+          name: drift-report
+          path: reports/drift_report.json
+      - name: Open an issue on ALERT
+        if: steps.drift.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create --repo "${{ github.repository }}" --title "Drift alert $(date +%F)" \
+            --body "Drift check reported ALERT. The full report is attached to the workflow run."
+      - name: Fail the run on alert
+        if: steps.drift.outcome == 'failure'
+        run: exit 1

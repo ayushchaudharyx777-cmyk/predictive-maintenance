@@ -1,0 +1,33 @@
+# Daily drift check against the logged API traffic. Exits 1 on ALERT -> Job shows as Failed (hook alerting onto that).
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pdm-drift-monitor
+  namespace: pdm
+spec:
+  schedule: "0 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1000
+          containers:
+            - name: monitor
+              image: pdm-api:1.0
+              imagePullPolicy: IfNotPresent
+              command: ["sh", "-c", "test -f logs/predictions.jsonl || { echo 'no traffic logged yet'; exit 0; }; PDM_REPORT_DIR=/tmp python monitor.py --current logs/predictions.jsonl"]
+              envFrom:
+                - configMapRef: {name: pdm-config}
+              volumeMounts:
+                - {name: logs, mountPath: /app/logs}
+          volumes:
+            - name: logs
+              persistentVolumeClaim: {claimName: pdm-logs}

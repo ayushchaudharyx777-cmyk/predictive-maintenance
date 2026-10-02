@@ -16,6 +16,8 @@ def dirs(tmp_path_factory):
     mp.setenv("PDM_DATA_DIR", str(base / "data"))
     mp.setenv("PDM_MODEL_DIR", str(base / "models"))
     mp.setenv("PDM_REPORT_DIR", str(base / "reports"))
+    mp.setenv("PDM_PRED_LOG", str(base / "logs" / "predictions.jsonl"))
+    mp.setenv("PDM_NO_MLFLOW", "1")
     from make_synthetic_data import make
 
     make(base / "data")

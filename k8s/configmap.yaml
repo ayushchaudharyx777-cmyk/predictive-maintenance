@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pdm-config
+  namespace: pdm
+data:
+  PDM_PRED_LOG: /app/logs/predictions.jsonl
