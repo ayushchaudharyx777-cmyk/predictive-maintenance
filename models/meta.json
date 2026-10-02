@@ -1,0 +1,144 @@
+{
+  "version": "20261003-043053",
+  "model": "Gradient Boosting",
+  "synthetic_data": false,
+  "horizon_hours": 24,
+  "step_hours": 3,
+  "threshold": 0.4540025774578229,
+  "fbeta": 2.0,
+  "features": [
+    "volt",
+    "rotate",
+    "pressure",
+    "vibration",
+    "volt_mean_3h",
+    "volt_std_3h",
+    "volt_mean_24h",
+    "volt_std_24h",
+    "rotate_mean_3h",
+    "rotate_std_3h",
+    "rotate_mean_24h",
+    "rotate_std_24h",
+    "pressure_mean_3h",
+    "pressure_std_3h",
+    "pressure_mean_24h",
+    "pressure_std_24h",
+    "vibration_mean_3h",
+    "vibration_std_3h",
+    "vibration_mean_24h",
+    "vibration_std_24h",
+    "volt_trend_24h",
+    "rotate_trend_24h",
+    "pressure_trend_24h",
+    "vibration_trend_24h",
+    "error1_count_24h",
+    "error2_count_24h",
+    "error3_count_24h",
+    "error4_count_24h",
+    "error5_count_24h",
+    "days_since_comp1",
+    "days_since_comp2",
+    "days_since_comp3",
+    "days_since_comp4",
+    "age",
+    "model_model1",
+    "model_model2",
+    "model_model3",
+    "model_model4"
+  ],
+  "split": {
+    "train_end": "2015-08-08 10:48:00",
+    "valid_end": "2015-10-19 20:24:00"
+  },
+  "rows": {
+    "train": 173000,
+    "valid": 57100,
+    "test": 58000
+  },
+  "valid_pr_auc": {
+    "Logistic Regression": 0.8258766864318827,
+    "Gradient Boosting": 0.9995504795251203
+  },
+  "test": {
+    "rows": {
+      "pr_auc": 0.9984221925282728,
+      "roc_auc": 0.9999745922616126,
+      "prevalence": 0.01817241379310345,
+      "precision": 0.9867924528301887,
+      "recall": 0.9924098671726755,
+      "true_alerts": 1046,
+      "false_alarms": 14,
+      "missed": 8
+    },
+    "events": {
+      "failures": 133,
+      "failures_caught": 133,
+      "failure_recall": 1.0,
+      "false_alarm_days": 6,
+      "false_alarm_days_per_week": 0.5803108808290156,
+      "machines": 100
+    }
+  },
+  "baseline_any_error": {
+    "rows": {
+      "pr_auc": 0.1985681989449887,
+      "roc_auc": 0.9626488252028238,
+      "prevalence": 0.01817241379310345,
+      "precision": 0.1985681989449887,
+      "recall": 1.0,
+      "true_alerts": 1054,
+      "false_alarms": 4254,
+      "missed": 0
+    },
+    "events": {
+      "failures": 133,
+      "failures_caught": 133,
+      "failure_recall": 1.0,
+      "false_alarm_days": 979,
+      "false_alarm_days_per_week": 94.68739205526771,
+      "machines": 100
+    }
+  },
+  "importance": [
+    [
+      "error4_count_24h",
+      0.1121
+    ],
+    [
+      "error5_count_24h",
+      0.0907
+    ],
+    [
+      "error1_count_24h",
+      0.0533
+    ],
+    [
+      "vibration_mean_24h",
+      0.0422
+    ],
+    [
+      "volt_mean_24h",
+      0.0336
+    ],
+    [
+      "days_since_comp1",
+      0.0281
+    ],
+    [
+      "rotate_mean_24h",
+      0.0212
+    ],
+    [
+      "error3_count_24h",
+      0.0171
+    ],
+    [
+      "error2_count_24h",
+      0.0159
+    ],
+    [
+      "days_since_comp3",
+      0.0142
+    ]
+  ]
+}

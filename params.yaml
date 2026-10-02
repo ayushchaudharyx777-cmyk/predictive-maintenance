@@ -1,0 +1,8 @@
+# All assumptions live here. Change a value, re-run `python train.py`.
+data_dir: data
+horizon_hours: 24      # "will this machine fail in the next 24 hours?"
+step_hours: 3          # score every 3rd hour (keeps training fast, loses nothing: features are rolling)
+train_frac: 0.6        # first 60% of the timeline -> train
+valid_frac: 0.2        # next 20% -> choose model + alert threshold; last 20% -> test
+fbeta: 2.0             # threshold maximises F2: a missed failure hurts more than a false alarm
+seed: 42
