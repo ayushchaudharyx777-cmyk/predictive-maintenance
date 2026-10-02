@@ -203,3 +203,11 @@ monitor.py api.py app.py params.yaml dvc.yaml
 scripts/{make_synthetic_data,quality_gate}.py   tests/   airflow/dags/   k8s/   monitoring/   docs/
 Dockerfile docker-compose.yml   .github/workflows/{ci,cd,monitor}.yml   requirements*.txt   pyproject.toml
 ```
+
+## Future scope
+
+- **Remaining useful life:** predict how many hours are left instead of a yes/no for the next 24h.
+- **Real, noisy data:** run the same pipeline on NASA turbofan or Backblaze drive data, since this dataset is simulated.
+- **Live sensor stream:** the dashboard replays history; connect it to real-time readings (Kafka or MQTT).
+- **Feedback loop:** let technicians mark alerts as right or wrong, and retrain automatically when drift reaches ALERT.
+- **Real cost data:** replace the assumed costs with actual repair and downtime figures.
