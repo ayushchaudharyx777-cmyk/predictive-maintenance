@@ -2,6 +2,10 @@
 
 [![CI](../../actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml) **API docs:** `/docs` | **Results:** [`reports/RESULTS.md`](reports/RESULTS.md)
 
+![Python](https://img.shields.io/badge/python-3.12-blue) ![scikit-learn](https://img.shields.io/badge/scikit--learn-model-orange) ![FastAPI](https://img.shields.io/badge/FastAPI-API-009688) ![Streamlit](https://img.shields.io/badge/Streamlit-dashboard-FF4B4B) ![Docker](https://img.shields.io/badge/Docker-ready-2496ED) ![Tests](https://img.shields.io/badge/tests-35_passing-brightgreen)
+
+![Fleet monitor](docs/screenshots/overview.png)
+
 Predict whether a machine will **fail within the next 24 hours** from its hourly sensor readings, error log and
 maintenance history; say **which component** is likely to fail and **why**; show a monitoring view that raises
 alerts; put a **cost** on every alerting policy; serve it via an API, **monitor drift**, and ship it with
@@ -142,7 +146,6 @@ Same pipeline with a shorter or longer warning window:
 
 ## Dashboard
 
-![overview](docs/screenshots/overview.png)
 ![table](docs/screenshots/table.png)
 ![alert_log](docs/screenshots/alert_log.png)
 ![savings](docs/screenshots/savings.png)
