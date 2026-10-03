@@ -140,6 +140,14 @@ Same pipeline with a shorter or longer warning window:
   error and sensor patterns. Real factory data would be noisier and the score lower. The method (time split,
   leakage test, event-level metrics, sanity check) is what carries over, not the number.
 
+## Dashboard
+
+![overview](docs/screenshots/overview.png)
+![table](docs/screenshots/table.png)
+![alert_log](docs/screenshots/alert_log.png)
+![savings](docs/screenshots/savings.png)
+![savings_chart](docs/screenshots/savings_chart.png)
+
 ## Decisions worth knowing
 
 - **Time split, not random split.** Neighbouring hours are almost identical, so a random split would put near-copies
